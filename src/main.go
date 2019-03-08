@@ -1,20 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/cgi"
+
+	"github.com/HayatoDoi/shortener/src/handlers"
 )
 
-func viewHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	fmt.Fprintln(w, "-------- Standard Library ---------")
-	fmt.Fprintln(w, "Method:", r.Method)
-	fmt.Fprintln(w, "URL:", r.URL.String())
-	fmt.Fprintln(w, "URL.Path:", r.URL.Path)
-	fmt.Fprintln(w, "hello:")
-}
+//go:generate go-assets-builder -p views -o views/views.go views/
+
 func main() {
-	http.HandleFunc("/", viewHandler) // 登録A
+	handler := handlers.New()
+	handler.AddTemplate("/views/index.tmpl")
+
+	http.HandleFunc("/", handler.Index)
 	cgi.Serve(nil)
+
 }
