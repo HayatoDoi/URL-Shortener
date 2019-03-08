@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+    RewriteCond %{REQUEST_URI} !/assets/.*$
+    RewriteRule ^(.*)$ cgi-bin/index.cgi [L]
+</IfModule>

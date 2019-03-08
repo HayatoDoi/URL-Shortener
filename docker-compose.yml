@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+
+  apache:
+    build: ./container/httpd
+    ports:
+      - "80:80"
+    volumes:
+      - "./public:/usr/local/apache2/public"
+    environment:
+      DATABASE_HOST: lamp_mysql
+      DATABASE_NAME: URL_SHORTENER
+      DATABASE_USER: user
+      DATABASE_PASSWORD: user # Mysql Password
+    container_name: lamp_apache
+  
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - "./container/mysql:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: URL_SHORTENER
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: root
+    container_name: lamp_mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: lamp_mysql
+      PMA_USER: user
+      PMA_PASSWORD: user
+    ports:
+      - "8080:80"
+    volumes:
+      - "/sessions"
+    container_name: lamp_phpmyadmin
